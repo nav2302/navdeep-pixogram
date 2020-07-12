@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Image Details</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<div th:replace="fragments/navbar :: navbar"></div>
+	<script th:src="@{/js/navbar.js}"></script>
+	
+	
+	<div class="container h-100">
+		<div class="h-100">
+			<div class="row h-100 justify-content-center align-items-center">
+				<div class="col-sm-5">
+					<h3>Fill The Details</h3>
+
+					<div th:if="${fail != 0}">
+						<div th:text = "${failText}" class="alert alert-info">You've successfully registered
+							to our awesome app!</div>
+					</div>
+
+					<form th:action="@{/files/addData/{id}(id = ${image.id})}"
+						th:object="${user}" method="post">
+
+						
+
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('name')}? 'has-error':''">
+							<div class="input-group">
+								<span class="input-group-addon"> Name: </span> <input id="name"
+									class="form-control" placeholder="Enter Name" type="text"
+									th:value="${image.name != null} ? ${image.name} : ''" name = "name" />
+							</div>
+							<p class="error-message"
+								th:each="error: ${#fields.errors('name')}" th:text="${error}">Validation
+								error</p>
+						</div>
+						
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('caption')}? 'has-error':''">
+							<div class="input-group">
+								<span class="input-group-addon"> Caption: </span> <input id="caption"
+									name = "caption" class="form-control" placeholder="Enter Caption" type="text"
+									th:value="${image.caption != null} ? ${image.caption} : ''" />
+							</div>
+							<p class="error-message"
+								th:each="error: ${#fields.errors('caption')}" th:text="${error}">Validation
+								error</p>
+						</div>
+						
+						<div class="form-group"
+							th:classappend="${#fields.hasErrors('description')}? 'has-error':''">
+							<div class="input-group">
+								<span class="input-group-addon"> Name: </span> <input id="description"
+									name = "description" class="form-control" placeholder="Enter Description" type="text"
+									th:value="${image.description != null} ? ${image.description} : ''" />
+							</div>
+							<p class="error-message"
+								th:each="error: ${#fields.errors('description')}" th:text="${error}">Validation
+								error</p>
+						</div>
+
+						<div class="form-group">
+							<button type="submit" class="btn btn-success btn-block">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

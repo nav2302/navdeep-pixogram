@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Videos</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/gallery.css}" />
+</head>
+
+<body>
+	<div th:replace="fragments/navbar :: navbar(4)"></div>
+	<script th:src="@{/js/navbar.js}"></script>
+	
+	<!--  <div class="container-all">
+		<div th:each="video: ${videos}" class="container effect5">
+			<video controls="controls">
+			<source th:src="'data:video/mp4;base64,' + ${imgUtil.getImgData(video.pic)}"  type="video/mp4"></source>
+			</video> 
+			<span
+				th:text="${video.caption != null} ? ${video.caption} : 'No Caption'"
+				class="title">Caption</span> <span
+				th:text="${video.description != null} ? ${video.description} : 'No Description'"
+				class="text">Description</span> <a class="imgButton"
+				th:text="${video.caption != null} ? 'EDIT' : 'ADD'"
+				th:href="@{/videos/addData/{id}(id = ${video.id})}" role="button">Video</a>
+		</div>
+	</div> -->
+	
+	<ul class = "showgallery">
+		<li class="boss" th:each="video: ${videos}"><a href="#"><video
+					controls="controls">
+					<source
+						th:src="'data:video/mp4;base64,' + ${imgUtil.getImgData(video.pic)}"
+						type="video/mp4"></source>
+				</video> </a></li>
+		<li></li>
+	</ul>
+	
+</body>
+</html>

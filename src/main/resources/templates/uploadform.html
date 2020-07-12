@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  manifest="offline.manifest">
+<head>
+<title>Upload Multiple Files</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/pace-theme-center-circle.css}"/>
+<script th:src="@{/js/pace.js}"></script>
+
+<script src="http://malsup.github.com/jquery.form.js"></script>
+
+<script th:src="@{js/fileLoader.js}">
+    
+</script>
+
+</head>
+
+<body>
+
+	<div th:replace="fragments/navbar :: navbar(2)"></div>
+	<script th:src="@{/js/navbar.js}"></script>
+<br/>
+<br/>
+	<div id='progressBar'
+		style='height: 20px; border: 2px solid #37bf15; margin-bottom: 20px;width: 50%;border-radius: 50px;margin-left: 25%'>
+		<div id='bar' style='height: 80%; background: #33dd33; width: 0%'>
+		</div>
+	</div>
+
+	<div class="container h-100">
+		<div class="h-100">
+			<div class="row h-100 justify-content-center align-items-center">
+				<div id="status"></div>
+
+				<div class="col-sm-5">
+					<h3>Upload Single/Multiple Images</h3>
+
+					<form th:action="@{/upload-file}" method="POST"
+						enctype="multipart/form-data" id="fileUploadForm">
+						<div class="form-group">
+							<label class="control-label" for="files">Upload Images:
+							</label> <input type="file" class="form-control" id="files"
+								placeholder="Upload Multiple Files" name="files"
+								multiple="multiple"></input>
+						</div>
+						<button type="submit" class="btn btn-default" id="uploadButton">Upload</button>
+						<a href="/files" class="btn btn-default" role="button">My Images</a>
+						<output id="selectedFiles"></output>
+					</form>
+				
+					<div th:if="${message}">
+						<strong><span th:text="${message}"></span></strong>
+						<hr></hr>
+					</div>
+					<ul th:each="filename: ${files}">
+						<li><span th:text="${filename}"></span></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Gallery</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/gallery.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/pace-theme-center-circle.css}"/>
+<script th:src="@{/js/pace.js}"></script>
+<script th:inline="javascript">
+    var real_data = /*[[${users}]]*/'noValue';
+    $(window).on('load',function() {
+        $("#nameInput").autocomplete({
+            minLength : 3,
+            source : real_data,
+            select : function(e, ui) {
+                $("#nameOutput").text('You have selected : ' + ui.item.value);
+                return ui.item.value;
+            }
+        })
+    });
+</script>
+
+</head>
+
+<body>
+	<div class="loader"></div>
+
+	<div th:replace="fragments/navbar :: navbar(3)"></div>
+	<script th:src="@{/js/navbar.js}"></script>
+	
+	
+	<div class="search">
+				<form th:action="@{/users/gallery}" method="GET"  th:object="${findUser}" class="search-form">
+					<input type="text" id = "nameInput" placeholder="Type any UserName.." th:field="*{email}"/>
+					<p class="error-message" th:each="error: ${#fields.errors('email')}" th:text="${error}">Validation error</p>
+					<input type="submit" value="Submit"/>
+				</form>
+	</div>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<ul class = "showgallery">
+		<li class="boss" th:each="image: ${images}"><a target="_blank"
+			th:href="@{/files/getData/{id}(id = ${image.id})}"><img
+				th:src="'data:image/jpeg;base64,' + ${imgUtil.getImgData(image.pic)}"
+				alt="Image not Supported" loading="lazy" id="sky" /></a>
+
+			<div style="display: flex; margin-top: 5%;">
+				<i class="fa fa-thumbs-up fa-lg" style="color: #51c854;"></i> 
+				<span th:text="${image.no_of_likes!=null} ? '&nbsp;&nbsp;'+${image.no_of_likes} : '&nbsp;&nbsp;0'" style="flex-grow: 1">Likes</span> 
+				<i class="fa fa-comments fa-lg" style="color: #51c854;"></i> 
+				<span>&nbsp;&nbsp;3048</span>
+			</div></li>
+		<li></li>
+	</ul>
+</body>
+</html>

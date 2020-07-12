@@ -1,0 +1,46 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+</head>
+<body>
+	<div th:fragment="navbar(isactive)">
+		<nav id="navbar" style="z-index:100;">
+			<div class="nav-wrapper">
+				<div class="logo">
+					<a href="#home">PIXOGRAM</a>
+				</div>
+
+				<ul id="menu">
+					<li><a th:class="${isactive == 1} ? 'active' : ''" th:href="@{/}" ><i
+							class="glyphicon glyphicon-home" style="margin-right: 4px;"></i>Home</a></li>
+
+					<li><a th:class="${isactive == 2} ? 'active' : ''" th:href="@{/upload-file}">Upload Images</a></li>
+
+					<li><a th:class="${isactive == 3} ? 'active' : ''" th:href="@{/files}">My Images</a></li>
+
+					<li><a th:class="${isactive == 4} ? 'active' : ''" th:href="@{/videos}">My Videos</a></li>
+
+					<li><a th:class="${isactive == 6} ? 'active' : ''" th:href="@{/profile}">Profile</a></li>
+					
+					<li><a th:class="${isactive == 5} ? 'active' : ''" th:href="@{/logout}">Sign out</a></li>
+				</ul>
+			</div>
+		</nav>
+		<div class="menuIcon" style="z-index:100;">
+			<span class="icon icon-bars"></span> <span
+				class="icon icon-bars overlay"></span>
+		</div>
+		<div class="overlay-menu" style="z-index:99;">
+			<ul id="menu">
+				<li><a th:class="${isactive == 1} ? 'active' : ''" th:href="@{/}">Home</a></li>
+				<li><a th:class="${isactive == 2} ? 'active' : ''" th:href="@{/upload-file}">Upload Images</a></li>
+				<li><a th:class="${isactive == 3} ? 'active' : ''" th:href="@{/files}">My Images</a></li>
+				<li><a th:class="${isactive == 4} ? 'active' : ''" th:href="@{/videos}">My Videos</a></li>
+				<li><a th:class="${isactive == 6} ? 'active' : ''" th:href="@{/profile}">Profile</a></li>
+				<li><a th:class="${isactive == 5} ? 'active' : ''" th:href="@{/logout}">Sign Out</a></li>
+			</ul>
+		</div>
+		<br /> <br /> <br /> <br /> <br />
+	</div>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Image Details</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/details.css}" />
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/pace-theme-center-circle.css}" />
+	
+ <link th:href="@{/css/emojionearea.min.css}" rel="stylesheet"/>
+ 
+ 
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+	
+	<script th:src="@{/js/emojionearea.min.js}"></script>
+	
+
+<script th:inline="javascript">
+	$(function() {
+		$('#onclickchange').on('click', function() {
+			
+			var ButtonText = $(this).text();
+			if(ButtonText == 'Like'){
+				$('i').filter('#thumbsUp').css('color','#51c854');
+				$('button').filter("#onclickchange").html("Unlike");
+				var count = $('div').filter("#noOfLikes").text();
+				$('div').filter("#noOfLikes").text(++count);
+				var request = $.ajax({
+					url : '/files/getData',
+					type : 'GET',
+					data : {
+						id : /*[[${image.id}]]*/,
+						likes : 0,
+						userId : /*[[${user.id}]]*/
+					}
+				});
+			}
+			else{
+				$('i').filter('#thumbsUp').css('color','black');
+				$('button').filter("#onclickchange").html("Like");
+				var count = $('div').filter("#noOfLikes").text();
+				$('div').filter("#noOfLikes").text(--count);
+				var request = $.ajax({
+					url : '/files/getData',
+					type : 'GET',
+					data : {
+						id : /*[[${image.id}]]*/,
+						likes : 1,
+						userId : /*[[${user.id}]]*/
+					}
+				});
+			}
+
+			request.done(function(data) {
+			});
+
+			request.fail(function(jqXHR, textStatus) {
+			});
+		});
+		
+		
+		
+		
+	$('body').on('click', '#commentPost' , function() {
+			var message = document.getElementById("commentMessage").value;
+			var request = $.ajax({
+				url : '/files/getData/commentPost',
+				type : 'GET',
+				data : {
+					id : /*[[${image.id}]]*/,
+					userId : /*[[${user.id}]]*/,
+					message : message
+				}
+			});
+
+			request.done(function(data) {
+				$("#commentDiv").load(" #commentDiv");
+			});
+
+			request.fail(function(jqXHR, textStatus) {
+			});
+		});
+		
+	});
+</script>
+
+<script th:inline="javascript">
+function deleteComment(commentId){
+			var request = $.ajax({
+					url : '/files/getData/deleteOrEditComments',
+					type : 'GET',
+					data : {
+						id : /*[[${image.id}]]*/,
+						commentId : commentId
+					}
+				});
+			request.done(function(data) {
+				$("#commentDiv").load(" #commentDiv");
+			});
+
+			request.fail(function(jqXHR, textStatus) {
+			});
+}
+</script>
+
+</head>
+
+<body id="body">
+
+	<div th:replace="fragments/navbar :: navbar(10)"></div>
+	<script th:src="@{/js/navbar.js}"></script>
+
+	<a th:href="@{/files}" style="margin-left: 90%; margin-right: 10%;">
+		<button type="button" class="btn btn-success"
+			style="border-radius: 30px;">Go Back</button>
+	</a>
+	<br />
+	<br />
+	
+	<a th:href="@{'/files/getData/' + ${image.id} + '/edit'}"
+		style="margin-left: 90%; margin-right: 10%;">
+		<button type="button" class="btn btn-success"
+			style="border-radius: 30px;">Edit Image</button>
+	</a>
+	<div class="wrapper">
+		<div style="display: flex">
+
+			<a id="showLeftImage" th:if="${prevId != -1}"
+				th:href="@{'/files/getData/'+${prevId} + '#onclickchange'}"
+				class="previous round">&laquo;</a>
+
+			<div class="hovereffect">
+				<img class="img-responsive"
+					th:src="'data:image/jpeg;base64,' + ${imgUtil.getImgData(image.pic)}"
+					alt="" />
+				<div class="overlay">
+					<a class="info"
+						th:text="${image.showImage} ? 'HIDE IMAGE' : 'UNHIDE IMAGE'"
+						th:href="@{/hide(id = ${image.id},show = ${image.showImage})}">Hide
+						or Show Image..</a> <a class="info"
+						th:text="${image.caption != null} ? 'EDIT' : 'ADD'"
+						th:href="@{/files/addData/{id}(id = ${image.id})}">Edit or Add
+						Caption and Description..</a>
+				</div>
+			</div>
+
+			<a id="showRightImage" th:if="${nextId != -1}"
+				th:href="@{'/files/getData/'+${nextId} + '#onclickchange'}"
+				class="next round">&raquo;</a>
+
+		</div>
+	</div>
+	<br />
+	<div style="display: inline-block; margin-left: 40%; width: 100%;">
+		<i id="thumbsUp" th:if="${yesHeLikes==0}" class="fa fa-thumbs-up"></i>
+		<i id="thumbsUp" th:if="${yesHeLikes!=0}" class="fa fa-thumbs-up"
+			style="color: #51c854;"></i>
+		<button style="background-color: white; padding: 0px; outline: none"
+			th:text="${yesHeLikes==0} ? 'Like' : 'Unlike'" id="onclickchange"
+			name="onclicklike" class="btn btn-light">LikeorUnlike</button>
+
+
+		<i class="fa fa-comments" style="color: #51c854; margin-left: 12vw;"></i>
+		<button style="background-color: white; padding: 0px; outline: none"
+			name="onclicklike" class="btn btn-light">Comments</button>
+
+	</div>
+
+	<div style="display: flex">
+		<div style="margin-left: 40%;" id="noOfLikes"
+			th:text="${likes!=null} ? ${likes} : 0"></div>
+	</div>
+
+	<p th:text="${image.caption != null} ? ${image.caption} : 'No Caption'">Here
+		comes your Caption bitch....</p>
+	<p
+		th:text="${image.description != null} ? ${image.description} : 'No Description'">Here
+		is Description</p>
+
+
+	<!-- COMMENTS SECTION -->
+	<div id="commentDiv" class="row bootstrap snippets">
+		<div class="col-md-6 col-md-offset-3 col-sm-12">
+			<div class="comment-wrapper">
+				<div class="panel panel-info">
+					<div class="panel-heading">Comments</div>
+					<div class="panel-body">
+						<textarea data-emojiable="true" id="commentMessage" class="form-control"
+							placeholder="write a comment..." rows="3"></textarea>
+						<br />
+						<script>
+		$(document).ready(function(){
+			$('#commentMessage').emojioneArea({
+				pickerPosition: "bottom"
+			});
+		})
+	</script>
+						<button id="commentPost" type="button"
+							class="btn btn-info pull-right">Post</button>
+						<div class="clearfix"></div>
+						<hr />
+						<ul class="media-list">
+							<th:block th:each="comment : ${comments}">
+								<li class="media"><a href="#" class="pull-left"> <img
+										src="https://bootdey.com/img/Content/user_1.jpg" alt=""
+										class="img-circle" />
+								</a>
+									<div class="media-body">
+										<span class="text-muted pull-right"> <small
+											th:text="${comment.modifyDate}" class="text-muted">30
+												min ago</small>
+												
+									
+										<button th:onclick="|deleteComment('${comment.id}')|"><i style="color:red;" class="fa fa-trash"></i></button>
+										<button th:onclick="|edit('${comment.id}')|"><i style="color:green;" class="fa fa-pencil-square-o"></i></button>
+										</span>
+										<strong th:text="'@' + ${comment.user.email}"
+											class="text-success">@MartinoMont</strong>
+										<p th:text="${comment.message}">
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+											Lorem ipsum dolor sit amet, <a href="#">#consecteturadipiscing
+											</a>.
+										</p>
+									</div>
+								 </li>
+							</th:block>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- END OF COMMENTS SECTION -->
+
+	<script th:src="@{/js/triggerButton.js}"></script>
+	<script th:src="@{/js/pace.js}"></script>
+
+
+
+</body>
+</html>

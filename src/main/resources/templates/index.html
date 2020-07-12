@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  manifest="offline.manifest">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+	
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/pace-theme-center-circle.css}"/>
+    
+    
+    <script th:src="@{/js/pace.js}"></script>
+    <title>Registration</title>
+</head>
+<body>
+	<div th:replace="fragments/navbar :: navbar(1)"></div>
+	
+	<script th:src="@{/js/navbar.js}"></script>
+	<div class="container">
+			<h2>
+				Hi <span th:utext="${userName}"></span>, this is the home page.
+			</h2>
+		</div>
+
+	<script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

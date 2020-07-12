@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" />
+
+
+<title>My profile</title>
+</head>
+<body>
+	<div th:replace="fragments/navbar :: navbar(6)"></div>
+	<script th:src="@{/js/navbar.js}"></script>
+
+	<div class="w3-padding-large" id="main">
+		<div class="w3-content w3-justify w3-text-grey w3-padding-64"
+			style="margin: 20px" id="about">
+			<img
+				src="https://www.answerspoint.com/user/uploads/users/default_.png"
+				alt="Avatar" class="w3-left w3-circle w3-margin-right"
+				onerror="this.onerror=null; this.src='https://www.answerspoint.com/user/uploads/users/default_user.png'"
+				style="width: 80px" />
+			<h1 style="color: #51c854;" th:text="${name}"
+				class="w3-text-light-grey">My Name</h1>
+			<hr style="width: 200px" class="w3-opacity" />
+			<h3 class="w3-padding-16 w3-text-light-grey">About me</h3>
+			<p
+				th:text="${user.about!=null}? ${user.about} : 'Provide your little description!'"
+				align="justify"></p>
+			<br />
+			<h3 class="w3-padding-16 w3-text-light-grey">General info</h3>
+			<div style="display: flex;">
+				<div>
+					<span style="margin-right: 20px; font-weight: bold;">Date Of
+						Birth:</span>
+				</div>
+				<div style="word-break: break-word;">
+					<span
+						th:text="${user.dob != null} ? ${#calendars.format(user.dob,'dd/MM/yyyy')} : 'Date of Birth not provided'">
+					</span>
+				</div>
+			</div>
+			<br />
+			<div style="display: flex;">
+				<div>
+					<span style="margin-right: 50px; font-weight: bold;">Address:</span>
+				</div>
+				<div style="word-break: break-word">
+					<p th:if="${user.address !=null OR user.address!=''}"
+						th:text="${user.address}" align="justify"></p>
+					<p th:if="${user.address ==null OR user.address==''}">Address
+						not Provided!</p>
+				</div>
+			</div>
+			<br />
+			<div style="display: flex;">
+				<div>
+					<p style="margin-right: 65px; font-weight: bold;">Email:</p>
+				</div>
+				<div style="word-break: break-word">
+					<span th:text="${user.email}">navdeepsingham@gmail.com</span>
+				</div>
+			</div>
+			<br />
+			<div style="display: flex;">
+				<div>
+					<p style="margin-right: 60px; font-weight: bold;">Phone:</p>
+				</div>
+				<div style="word-break: break-word;">
+					<span th:if="${user.phone !=null OR user.phone!=''}"
+						th:text="${user.phone}">This is my Phone no.</span> <span
+						th:if="${user.phone ==null OR user.phone==''}">No phone
+						no. provided</span>
+				</div>
+			</div>
+			<br />
+
+			<h3 class="w3-padding-16 w3-text-light-grey">Social Accounts</h3>
+			<br />
+			<div class="social">
+				<a class="socialLink" href="#"><span class="socialLinkspan">Facebook</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">Twitter</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">Google+</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">Github</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">Dribbble</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">CodePen</span></a>
+			</div>
+		</div>
+		<br /> <br /> <br />
+	</div>
+
+	<div class="text-center">
+		<a href="#myModal" role="button" class="btn btn-success btn-lg"
+			data-toggle="modal">Update Details</a>
+	</div>
+	<br />
+	<br />
+
+	<div id="myModal" class="modal fade" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×</button>
+					<h3 id="myModalLabel">Your Details</h3>
+				</div>
+				<div class="modal-body">
+
+
+
+					<form class="form-horizontal col-sm-12" method="POST"
+						th:action="@{/profile/{id}(id = ${user.id})}"
+						th:object="${updatedUser}">
+						<div class="form-group">
+							<label>First Name</label> <input
+								th:value="${user.firstName != null} ? ${user.firstName} : ''"
+								name="firstName" class="form-control" required="required"
+								placeholder="Your First name" data-placement="top"
+								data-trigger="manual"
+								data-content="Must be at least 3 characters long, and must only contain letters."
+								type="text" />
+						</div>
+
+						<div class="form-group">
+							<label>Last Name</label> <input
+								th:value="${user.lastName != null} ? ${user.lastName} : ''"
+								name="lastName" class="form-control" required="required"
+								placeholder="Your last name" data-placement="top"
+								data-trigger="manual"
+								data-content="Must be at least 3 characters long, and must only contain letters."
+								type="text" />
+						</div>
+
+						<div class="form-group">
+							<label>About me</label>
+							<textarea th:text="${user.about != null} ? ${user.about} : ''"
+								name="about" class="form-control" required="required"
+								placeholder="Your message here.." data-placement="top"
+								data-trigger="manual"></textarea>
+						</div>
+
+						<div class="form-group">
+							<label>Address</label>
+							<textarea
+								th:text="${user.address != null} ? ${user.address} : ''"
+								name="address" class="form-control" required="required"
+								placeholder="Your message here.." data-placement="top"
+								data-trigger="manual"></textarea>
+						</div>
+
+						<div class="form-group">
+							<label>E-Mail</label><input
+								th:value="${user.email != null} ? ${user.email} : ''"
+								name="email" class="form-control" required="required"
+								placeholder="email@you.com (so that we can contact you)"
+								data-placement="top" data-trigger="manual"
+								data-content="Must be a valid e-mail address (user@gmail.com)"
+								type="text" />
+						</div>
+						<div class="form-group">
+							<label>Phone</label><input
+								th:value="${user.phone != null} ? ${user.phone} : ''"
+								name="phone" class="form-control" required="required"
+								placeholder="9999999999" data-placement="top"
+								data-trigger="manual"
+								data-content="Must be a valid phone number (9999999999)"
+								type="text" />
+						</div>
+						<div class="form-group">
+							<label>Date Of Birth</label> <input
+								th:value="${user.dob != null} ? ${user.dob} : ''" name="dob"
+								class="form-control" required="required"
+								placeholder="22/03/1998" data-placement="top"
+								data-trigger="manual" data-content="Please enter a DOB"
+								type="date" />
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-success pull-right">Update!</button>
+							<p class="help-block pull-left text-danger hide" id="form-error">&nbsp;
+								The Details are not correct.</p>
+						</div>
+
+						<div class="form-group">
+							<label>Facebook Link</label>
+							<textarea class="form-control" placeholder="Your facebook link.."
+								data-placement="top" data-trigger="manual"></textarea>
+						</div>
+						<div class="form-group">
+							<label>Twitter Link</label>
+							<textarea class="form-control" placeholder="Your twitter link.."
+								data-placement="top" data-trigger="manual"></textarea>
+						</div>
+						<div class="form-group">
+							<label>Google+ link</label>
+							<textarea class="form-control" placeholder="Your link here.."
+								data-placement="top" data-trigger="manual"></textarea>
+						</div>
+						<div class="form-group">
+							<label>Instagram Link</label>
+							<textarea class="form-control" placeholder="Your link here.."
+								data-placement="top" data-trigger="manual"></textarea>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:src="@{/js/editProfileFormValidation.js}"></script>
+</body>
+</html>

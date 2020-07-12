@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+
+
+<title>Bio</title>
+</head>
+<body>
+	<div th:replace="fragments/navbar :: navbar(60)"></div>
+	<script th:src="@{/js/navbar.js}"></script>
+
+	<div class="w3-padding-large" id="main">
+		<div class="w3-content w3-justify w3-text-grey w3-padding-64"
+			style="margin: 20px" id="about">
+			<div style="display: table-caption">
+				<img
+					src="https://www.answerspoint.com/user/uploads/users/default_.png"
+					alt="Avatar" class="w3-left w3-circle w3-margin-right"
+					onerror="this.onerror=null; this.src='https://www.answerspoint.com/user/uploads/users/default_user.png'"
+					style="width: 80px" />
+				<a th:href="@{/users/gallery(email = ${user.email})}" style="margin-left:90%;">
+				<button type="button" class="btn btn-success">View Posts</button></a>
+			</div>
+			<h1 style="color: #51c854;" th:text="${name}"
+				class="w3-text-light-grey">My Name</h1>
+			<hr style="width: 200px" class="w3-opacity" />
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-4 bordered-right">
+						<h5 class="text-center">
+							<button type="button" class="btn btn-sm" data-toggle="modal" data-target="#followersModal">Followers
+							</button><br/> <strong th:text="${followers}">1,397</strong>
+						</h5>
+					</div>
+					<div class="col-xs-4 bordered-right">
+						<h5 class="text-center">
+							<button type="button" class="btn btn-sm" data-toggle="modal" data-target="#followersModal">Following</button>
+							<br/> <strong th:text="${following}">26</strong>
+						</h5>
+					</div>
+					<div class="col-xs-4 bordered-right">
+						<h5 class="text-center">
+							<button type="button" class="btn btn-sm">Posts</button>
+							<br/> <strong th:text="${posts}">26</strong>
+						</h5>
+					</div>
+				</div>
+			</div>
+			<h3 class="w3-padding-16 w3-text-light-grey">About me</h3>
+			<p  th:text="${user.about!=null}? ${user.about} : 'Provide your little description!'" align="justify"></p>
+			<br />
+			<h3 class="w3-padding-16 w3-text-light-grey">General info</h3>
+			<div style="display: flex;">
+				<div>
+					<span style="margin-right: 20px; font-weight: bold;">Date Of Birth:</span>
+				</div>
+				<div style="word-break: break-word;">
+					<span th:text="${user.dob != null} ? ${#calendars.format(user.dob,'dd/MM/yyyy')} : 'Date of Birth not provided by the user.'">
+					</span>
+				</div>
+			</div>
+			<br />
+			<div style="display: flex;">
+				<div>
+					<span style="margin-right: 50px; font-weight: bold;">Address:</span>
+				</div>
+				<div style="word-break: break-word">
+					<p th:if="${user.address !=null OR user.address!=''}" th:text="${user.address}" align="justify"></p>
+					<p th:if="${user.address ==null OR user.address==''}">Address not Provided by the User!</p>
+				</div>
+			</div>
+			<br />
+			<div style="display: flex;">
+				<div>
+					<p style="margin-right: 65px; font-weight: bold;">Email:</p>
+				</div>
+				<div style="word-break: break-word">
+					<span th:text="${user.email}">navdeepsingham@gmail.com</span>
+				</div>
+			</div>
+			<br />
+			<div style="display: flex;">
+				<div>
+					<p style="margin-right: 60px; font-weight: bold;">Phone:</p>
+				</div>
+				<div style="word-break: break-word;">
+					<span th:if="${user.phone !=null OR user.phone!=''}" th:text="${user.phone}">This is my Phone no.</span>
+					<span th:if="${user.phone ==null OR user.phone==''}" >No phone no. provided by the user!</span>
+				</div>
+			</div>
+			<br />
+
+			<h3 class="w3-padding-16 w3-text-light-grey">Social Accounts</h3>
+			<br />
+			<div class="social">
+				<a class="socialLink" href="#"><span class="socialLinkspan">Facebook</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">Twitter</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">Google+</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">Github</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">Dribbble</span></a>
+				<a class="socialLink" href="#"><span class="socialLinkspan">CodePen</span></a>
+			</div>
+		</div>
+		<br /> <br /> <br />
+	</div>
+
+	<div class="text-center">
+		<a href="#myModal" role="button" class="btn btn-success btn-lg" data-toggle="modal">Update Details</a>
+	</div>
+	<br />
+	<br />
+
+	<!-- Modal -->
+<div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+
+                </button>
+                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+
+            </div>
+            <div class="modal-body">
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#uploadTab" aria-controls="uploadTab" role="tab" data-toggle="tab">Followers</a>
+
+                        </li>
+                        <li role="presentation"><a href="#browseTab" aria-controls="browseTab" role="tab" data-toggle="tab">Following</a>
+
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="uploadTab">
+								<ul style="list-style: none;background:white;">
+									<li th:each="follower: ${user.followers}">
+										<div style="display: flex;">
+											<div style="flex-grow: 1;" th:text="${follower.email}">Left</div>
+											<div><a><button type="button" class="btn btn-success">Follow</button></a></div>
+										</div>
+										<br/>
+									</li>
+								</ul>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="browseTab">
+							<ul style="list-style: none;background:white;">
+									<li th:each="following: ${user.following}"><p
+											th:text="${following.email}">List item with no bullet</p>
+									<br/></li>
+								</ul>
+							</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary save">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+	
+	
+	<script th:src="@{/js/editProfileFormValidation.js}"></script>
+</body>
+</html>

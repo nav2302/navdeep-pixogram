@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Gallery</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/gallery.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/pace-theme-center-circle.css}"/>
+<script th:src="@{/js/pace.js}"></script>
+
+</head>
+
+<body>
+	<div th:replace="fragments/navbar :: navbar(10)"></div>
+	<script th:src="@{/js/navbar.js}"></script>
+	
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	
+	<div th:if="${flag==0}"><a th:href="@{/users/gallery/follow(searchedUser = ${searchedUser.email}, user = ${user.email}, follow = 1)}" style="margin-left:90%;margin-right:20%;">
+	<button type="button" class="btn btn-success">Follow+</button></a></div>
+	<div th:if="${flag==1}"><a th:href="@{/users/gallery/follow(searchedUser = ${searchedUser.email}, user = ${user.email}, follow = 0)}" style="margin-left:90%;margin-right:20%;">
+	<button type="button" class="btn btn-success">Unfollow+</button></a></div>
+	<br/>
+	<br/>
+	<div><a th:href="@{/users/profile(searchedUser = ${searchedUser.email})}" style="margin-left:90%;margin-right:20%;">
+	<button type="button" class="btn btn-success">View Profile</button></a></div>
+	<br/>
+	<ul class = "showgallery">
+		<li class = "boss" th:each="image: ${images}">
+			<a target="_blank"
+			th:href="@{/users/images/getData/{id}/{follow}/(id = ${image.id}, follow = ${follow}, searchedUser = ${searchedUser.email})}"><img
+				th:src="'data:image/jpeg;base64,' + ${imgUtil.getImgData(image.pic)}"
+				alt="Image not Supported" loading="lazy" id="sky" /></a>
+		
+		<div style="display: flex; margin-top:5%;">
+				<i class="fa fa-thumbs-up fa-lg"  style="color: #51c854;"></i>
+				<span th:text="${image.no_of_likes!=null} ? '&nbsp;&nbsp;'+${image.no_of_likes} : '&nbsp;&nbsp;0'" style="flex-grow:1">&nbsp;&nbsp;Likes</span>
+				<i class="fa fa-comments fa-lg" style="color: #51c854;"></i>
+				<span>&nbsp;&nbsp;3048</span>	
+			</div>
+		</li>
+		<li></li>
+	</ul>
+</body>
+</html>
